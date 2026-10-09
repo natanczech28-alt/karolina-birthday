@@ -1,0 +1,355 @@
+<div id="birthday-app">
+<style>
+#birthday-app {
+  --pink:#ff9dbb;
+  --cream:#fff0f3;
+  position:relative;
+  overflow:hidden;
+  min-height:650px;
+  width:100%;
+  box-sizing:border-box;
+  background:radial-gradient(ellipse at 50% 20%,#632039 0%,#250b18 55%,#10060c 100%);
+  color:var(--cream);
+  font-family:Georgia,serif;
+  text-align:center;
+  border-radius:12px;
+}
+#birthday-app * {box-sizing:border-box}
+#birthday-app .screen {
+  display:none;
+  position:relative;
+  z-index:2;
+  width:100%;
+  max-width:760px;
+  min-height:650px;
+  margin:auto;
+  padding:55px 22px;
+  animation:appear .7s ease both;
+}
+#birthday-app .screen.active {display:flex;flex-direction:column;align-items:center;justify-content:center}
+#birthday-app h1 {
+  font-size:clamp(30px,5vw,52px);
+  font-weight:normal;
+  line-height:1.15;
+  margin:15px 0;
+}
+#birthday-app h2 {
+  font-size:clamp(27px,4vw,42px);
+  font-weight:normal;
+}
+#birthday-app p {line-height:1.8}
+#birthday-app .eyebrow {
+  color:#e8a1b7;
+  letter-spacing:3px;
+  font:11px Arial,sans-serif;
+}
+#birthday-app .sub {
+  color:#e6b3c4;
+  font-style:italic;
+  max-width:440px;
+}
+#birthday-app button {
+  cursor:pointer;
+  border:1px solid #d86b91;
+  border-radius:30px;
+  background:#862747;
+  color:white;
+  font:14px Arial,sans-serif;
+  padding:15px 27px;
+  margin:22px 0;
+  transition:transform .2s,background .2s;
+}
+#birthday-app button:hover {background:#b53d67;transform:scale(1.04)}
+#birthday-app button:focus-visible,
+#birthday-app .envelope:focus-visible {
+  outline:3px solid #ffb6cd;
+  outline-offset:5px;
+}
+#birthday-app .envelope {
+  position:relative;
+  width:250px;
+  height:165px;
+  margin:65px auto 30px;
+  cursor:pointer;
+  filter:drop-shadow(0 15px 22px #0008);
+  perspective:600px;
+}
+#birthday-app .env-back {
+  position:absolute;inset:0;
+  background:#a53256;border-radius:5px;
+}
+#birthday-app .env-letter {
+  position:absolute;
+  left:20px;top:12px;
+  width:210px;height:140px;
+  background:#f7dce3;
+  color:#872446;
+  padding-top:35px;
+  font-size:20px;
+  border-radius:5px;
+  transition:transform .9s ease .35s;
+  z-index:2;
+}
+#birthday-app .env-front {
+  position:absolute;inset:0;
+  background:#a92e54;
+  clip-path:polygon(0 0,50% 55%,100% 0,100% 100%,0 100%);
+  z-index:3;
+}
+#birthday-app .env-flap {
+  position:absolute;inset:0;
+  background:#e85b83;
+  clip-path:polygon(0 0,100% 0,50% 65%);
+  transform-origin:top;
+  transition:transform .8s;
+  z-index:4;
+}
+#birthday-app .env-heart {
+  position:absolute;
+  top:64px;left:109px;
+  color:#fff1f5;
+  font-size:32px;
+  z-index:5;
+}
+#birthday-app .envelope.open .env-flap {
+  transform:rotateX(180deg);
+  z-index:1;
+}
+#birthday-app .envelope.open .env-letter {
+  transform:translateY(-90px);
+}
+#birthday-app .envelope.open .env-heart {opacity:0}
+#birthday-app .letter-card {
+  width:100%;
+  max-width:650px;
+  background:rgba(65,15,36,.88);
+  border:1px solid #a54a69;
+  border-radius:15px;
+  padding:30px 25px;
+  box-shadow:0 20px 55px #0005;
+}
+#birthday-app .letter-card p {
+  font-size:clamp(15px,2.2vw,18px);
+  white-space:pre-wrap;
+  line-height:1.85;
+}
+#birthday-app .signature {
+  color:#ffb2c9;
+  font-style:italic;
+}
+#birthday-app .surprise {
+  font-size:clamp(35px,7vw,65px);
+  color:#ffc0d2;
+  animation:pulse 2s ease-in-out infinite;
+}
+#birthday-app .vinyl {
+  width:220px;height:220px;
+  border-radius:50%;
+  background:repeating-radial-gradient(circle,#171015 0px,#171015 4px,#35212a 5px,#171015 8px);
+  border:6px solid #100b10;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  box-shadow:0 18px 45px #0009;
+  animation:spin 7s linear infinite;
+  margin:35px auto;
+}
+#birthday-app .vinyl-label {
+  width:95px;height:95px;
+  border-radius:50%;
+  background:#9e3155;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  font:12px Georgia,serif;
+  color:white;
+  position:relative;
+}
+#birthday-app .vinyl-label:after {
+  content:"";
+  width:9px;height:9px;
+  border-radius:50%;
+  background:#170d13;
+  position:absolute;
+  bottom:22px;
+}
+#birthday-app .heart {
+  position:absolute;
+  bottom:-35px;
+  pointer-events:none;
+  z-index:1;
+  animation:floatUp linear forwards;
+}
+@keyframes appear {
+  from {opacity:0;transform:translateY(15px)}
+  to {opacity:1;transform:translateY(0)}
+}
+@keyframes floatUp {
+  from {transform:translateY(0) rotate(0);opacity:0}
+  15% {opacity:.8}
+  85% {opacity:.8}
+  to {transform:translateY(-850px) rotate(35deg);opacity:0}
+}
+@keyframes pulse {
+  50% {transform:scale(1.05)}
+}
+@keyframes spin {
+  to {transform:rotate(360deg)}
+}
+@media(max-width:500px) {
+  #birthday-app .screen {padding:38px 16px;min-height:620px}
+  #birthday-app .letter-card {padding:24px 17px}
+}
+@media(prefers-reduced-motion:reduce) {
+  #birthday-app *,#birthday-app *:before,#birthday-app *:after {
+    animation-duration:.01ms!important;
+    transition-duration:.01ms!important;
+  }
+}
+</style>
+
+<section class="screen active" id="b-screen1">
+  <div class="eyebrow">SPECJALNA PRZESYŁKA DLA CIEBIE</div>
+  <h1>Wszystkiego Najlepszego<br>Karolina!</h1>
+  <p class="sub">Kliknij, żeby otworzyć list od Natalii, Dominika i Natana.</p>
+  <div class="envelope" role="button" tabindex="0" aria-label="Otwórz list">
+    <div class="env-back"></div>
+    <div class="env-letter">Dla Karoliny ♡</div>
+    <div class="env-flap"></div>
+    <div class="env-front"></div>
+    <div class="env-heart">♥</div>
+  </div>
+  <div class="eyebrow">✦ KLIKNIJ KOPERTĘ ✦</div>
+</section>
+
+<section class="screen" id="b-screen2">
+  <div class="eyebrow">LIST OD NAS ♡</div>
+  <h2>Kochana Karolina,</h2>
+  <div class="letter-card">
+    <p id="b-wishes"></p>
+    <div class="signature">Z miłością,<br>Natalia, Dominik i Natan ♡</div>
+  </div>
+  <button id="b-next" style="display:none">Dalej ♡ →</button>
+</section>
+
+<section class="screen" id="b-screen3">
+  <div class="eyebrow">ALE TO JESZCZE NIE KONIEC</div>
+  <div class="surprise">♥ ✦ ♥</div>
+  <h1>Aaa, mamy coś jeszcze diva</h1>
+  <p class="sub">Bo zwykłe życzenia to zdecydowanie za mało.</p>
+  <button id="b-reveal">Odkryj niespodziankę ✦</button>
+</section>
+
+<section class="screen" id="b-screen4">
+  <div class="eyebrow">MADE WITH LOVE</div>
+  <h1>Ścieżka dźwiękowa<br>naszej historii</h1>
+  <p class="sub">Niektóre wspomnienia zasługują na własny soundtrack.</p>
+  <div class="vinyl">
+    <div class="vinyl-label">FOR<br>KAROLINA ♡</div>
+  </div>
+  <p>Stworzyliśmy coś specjalnie dla Ciebie.</p>
+  <button id="b-play">♡ Posłuchaj naszej playlisty</button>
+  <p class="signature">Natalia, Dominik & Natan</p>
+</section>
+
+<script>
+(function(){
+  const root=document.getElementById('birthday-app');
+  const envelope=root.querySelector('.envelope');
+  const wishesNode=root.querySelector('#b-wishes');
+  const next=root.querySelector('#b-next');
+  let opened=false;
+
+  // TUTAJ WKLEJ LINK DO PLAYLISTY LUB PLIKU AUDIO
+  const musicUrl="<iframe data-testid="embed-iframe" style="border-radius:12px" src="https://open.spotify.com/embed/playlist/0shOWWgIT59fr1CygOr7UV?utm_source=generator&si=0250b88cc75a4eba" width="100%" height="352" frameBorder="0" allowfullscreen="" allow="autoplay; clipboard-write; encrypted-media; fullscreen; picture-in-picture" loading="lazy"></iframe>";
+
+  const wishes=`Życzymy Ci, żebyś zawsze pozostała wyjątkowa i w końcu zaczęła to uznawać jako zaletę, a nie wadę.
+
+Dla nas zawsze jesteś wystarczająca i niczego nie chcemy bardziej, niż Twojego szczęścia.
+
+Prosimy też wszechświat, żeby wyszedł z retrogradacji i pierwszy raz ułożył klocki, a nie je rozwalał. Znajdziesz niedługo dobrą pracę, będziesz rozwijać swoje zainteresowania, to nie życzenia, lecz pewność, że tak będzie.
+
+Jesteś naprawdę kochana i wiedz, że nigdy nie będziesz sama pomimo tego, że czasami możesz się tak czuć.
+
+Jak będzie trzeba to zabijemy każdego frajera dla Ciebie :).
+
+Alone może być Alive, ale jest bardziej fun z nami.`;
+
+  function showScreen(number){
+    root.querySelectorAll('.screen').forEach(s=>s.classList.remove('active'));
+    root.querySelector('#b-screen'+number).classList.add('active');
+    root.scrollIntoView({behavior:'smooth',block:'start'});
+  }
+
+  function hearts(count){
+    for(let i=0;i<count;i++){
+      setTimeout(()=>{
+        const h=document.createElement('span');
+        h.className='heart';
+        h.textContent=['♥','♡','✦'][Math.floor(Math.random()*3)];
+        h.style.left=Math.random()*100+'%';
+        h.style.color=['#ff719b','#e5a0b8','#b53d67'][Math.floor(Math.random()*3)];
+        h.style.fontSize=(12+Math.random()*22)+'px';
+        h.style.animationDuration=(5+Math.random()*4)+'s';
+        root.appendChild(h);
+        setTimeout(()=>h.remove(),9500);
+      },i*100);
+    }
+  }
+
+  function typeWishes(){
+    if(window.matchMedia('(prefers-reduced-motion: reduce)').matches){
+      wishesNode.textContent=wishes;
+      next.style.display='inline-block';
+      return;
+    }
+    let i=0;
+    const timer=setInterval(()=>{
+      i=Math.min(i+5,wishes.length);
+      wishesNode.textContent=wishes.slice(0,i);
+      if(i>=wishes.length){
+        clearInterval(timer);
+        next.style.display='inline-block';
+      }
+    },15);
+  }
+
+  function openLetter(){
+    if(opened)return;
+    opened=true;
+    envelope.classList.add('open');
+    hearts(30);
+    setTimeout(()=>{
+      showScreen(2);
+      typeWishes();
+    },1250);
+  }
+
+  envelope.addEventListener('click',openLetter);
+  envelope.addEventListener('keydown',e=>{
+    if(e.key==='Enter'||e.key===' '){
+      e.preventDefault();
+      openLetter();
+    }
+  });
+
+  next.addEventListener('click',()=>{
+    showScreen(3);
+    hearts(18);
+  });
+
+  root.querySelector('#b-reveal').addEventListener('click',()=>{
+    showScreen(4);
+    hearts(35);
+  });
+
+  root.querySelector('#b-play').addEventListener('click',()=>{
+    if(musicUrl){
+      window.open(musicUrl,'_blank','noopener,noreferrer');
+    }else{
+      alert('Tutaj wkrótce pojawi się Wasza playlista ♡');
+    }
+  });
+})();
+</script>
+</div>
